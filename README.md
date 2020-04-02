@@ -48,7 +48,7 @@ public with sharing class AccountTH implements ITriggerHandler {
     /**
      * Default Constructor
      */
-    public AccountTriggerHandler() {
+    public AccountTH() {
         //Retrieve the metadata type
         triggerMeta = [SELECT DeveloperName, IsActive__c, ObjectName__c, CheckRecursion__c, LoopCountMax__c
                        FROM TriggerSettings__mdt
