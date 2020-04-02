@@ -50,8 +50,8 @@ public with sharing class AccountTH implements ITriggerHandler {
      */
     public AccountTriggerHandler() {
         //Retrieve the metadata type
-        triggerMeta = [SELECT DeveloperName, isActive__c, ObjectName__c, Recursion_Check__c, Max_Loop_Count__c
-                       FROM Trigger_Settings__mdt
+        triggerMeta = [SELECT DeveloperName, IsActive__c, ObjectName__c, CheckRecursion__c, LoopCountMax__c
+                       FROM TriggerSettings__mdt
                        WHERE DeveloperName = 'Account_Trigger'
                                              LIMIT 1];
     }
