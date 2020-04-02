@@ -3,19 +3,19 @@
     <label>Account Trigger</label>
     <protected>false</protected>
     <values>
-        <field>Max_Loop_Count__c</field>
+        <field>CheckRecursion__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>IsActive__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>LoopCountMax__c</field>
         <value xsi:nil="true"/>
     </values>
     <values>
         <field>ObjectName__c</field>
         <value xsi:type="xsd:string">Account</value>
-    </values>
-    <values>
-        <field>Recursion_Check__c</field>
-        <value xsi:type="xsd:boolean">false</value>
-    </values>
-    <values>
-        <field>isActive__c</field>
-        <value xsi:type="xsd:boolean">true</value>
     </values>
 </CustomMetadata>
