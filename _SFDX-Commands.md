@@ -3,5 +3,17 @@
 ## Convert Metadata to DX Format
 
 ``` shell
-sfdx force:mdapi:convert --rootdir path/to/metadata --outputdir path/to/outputdir
+sfdx force:mdapi:convert --rootdir src --outputdir force-app
+```
+
+## Push and Pull Code
+
+``` shell
+# push code
+force:source:push
+```
+
+``` shell
+# pull code
+force:source:pull
 ```

@@ -6,7 +6,6 @@
         <members>TriggerDispatcher</members>
         <name>ApexClass</name>
     </types>
-    
     <types>
         <members>Trigger_Settings__mdt.Max_Loop_Count__c</members>
         <members>Trigger_Settings__mdt.ObjectName__c</members>
