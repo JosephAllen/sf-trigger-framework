@@ -16,7 +16,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>isActive__c</field>
+                <field>IsActive__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -24,11 +24,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Recursion_Check__c</field>
+                <field>CheckRecursion__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Max_Loop_Count__c</field>
+                <field>LoopCountMax__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Max_Loop_Count__c</fullName>
+    <fullName>LoopCountMax__c</fullName>
     <defaultValue>1</defaultValue>
     <description>Field to control the maximum times a trigger can recurse in any given context.</description>
     <externalId>false</externalId>

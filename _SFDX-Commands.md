@@ -10,10 +10,10 @@ sfdx force:mdapi:convert --rootdir src --outputdir force-app
 
 ``` shell
 # push code
-force:source:push
+sfdx force:source:push
 ```
 
 ``` shell
 # pull code
-force:source:pull
+sfdx force:source:pull
 ```
