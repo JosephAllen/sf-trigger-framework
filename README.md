@@ -4,8 +4,7 @@ Trigger Handler based on Chris Aldridge's [Lightweight Apex Trigger Framework](h
 
 See Chris' original blog post: [Lightweight Apex Trigger Framework](http://chrisaldridge.com/triggers/lightweight-apex-trigger-framework/)
 
-
-Below are few things to keep in mind while implementing the framework and in general best practises.
+Below are few things to keep in mind while implementing the framework and in general best practices.
 
 ## Naming Convention
 
@@ -15,73 +14,106 @@ Below are few things to keep in mind while implementing the framework and in gen
 * None of the components in the framework should contain org name or app name.
 
 ## Metadata Type
-This package will create an mdt called Trigger Settings.   This mdt contains common levers to control the trigger handler functionality.  
+
+This package will create an mdt called Trigger Settings.   This mdt contains common levers to control the trigger handler functionality.
+
 * Trigger Settings Name = Name of the Trigger
-* isActive = Determines if the trigger is execute.  This should be read from the IsDisabled() funtion of the Trigger Handler class.
+* isActive = Determines if the trigger is execute.  This should be read from the IsDisabled() function of the Trigger Handler class.
 * ObjectName = SObject Type of the Trigger
 * Recursion Check = Can be used to control recursion if needed.
 * Max Loop Count = Used to control recursion if needed.
 
 ## Custom Permission
-This package creates a Custom Permission called Bypass Trigger.  Check the user for this permission in the IsDisabled funtion to bypass the trigger. Use the FeatureManagment.CheckPermission method.
-```java
+
+This package creates a Custom Permission called Bypass Trigger.  Check the user for this permission in the IsDisabled function to bypass the trigger. Use the FeatureManagment.CheckPermission method.
+
+``` csharp
 FeatureManagment.CheckPermission(Bypass_Trigger);
 ```
-## Create a Trigger Handler
-Create a single trigger handler class for each object.  This class will implement the Trigger Handler interface provided.  Add logic to retrieve the Custom Metadata record for that trigger as well has handle the IsDisabled flag.  For example, the Trigger Handler for Account would look like this:
-```java
-public class AccountTriggerHandler implements ITriggerHandler
-{
-	/* This class implements ITriggerHander. This sample shows how to 
-	 * retrieve the metadata type and set the isDisabled flag
-	*/
-    public Trigger_Settings__mdt triggerMeta = new Trigger_Settings__mdt();
-    
-    //create a constructor to get the metadatatype
-    public AccountTriggerHandler() {
-          //Retrive the metadata type
-    	triggerMeta = [Select DeveloperName, isActive__c, ObjectName__c, Recursion_Check__c, Max_Loop_Count__c from Trigger_Settings__mdt where DeveloperName='Account_Trigger' LIMIT 1] ; 
-    
-    }
-    
-    //read the custom metadata and look for the customer permission
-    public Boolean IsDisabled()
-    {
-		// return IsDisabled= true if the metadata setting isActive = false or
-		// the user has the Bypass Trigger custom permission
-        if (!triggerMeta.isActive__c || FeatureManagement.checkPermission('Bypass_Trigger')) 
-        	return false;
-        else 
-        	return true;
-    } 
- 
-    public void BeforeInsert(List<SObject> newItems) {
-        
-    }
- 
-    public void BeforeUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems) {
 
-            system.debug('Before Update for Account');
-    
+## Create a Trigger Handler
+
+Create a single trigger handler class for each object.  This class will implement the Trigger Handler interface provided.  Add logic to retrieve the Custom Metadata record for that trigger as well has handle the IsDisabled flag.  For example, the Trigger Handler for Account would look like this:
+
+```csharp
+/**
+ * Trigger handler using the TriggerHandler framework from
+ * http://chrisaldridge.com/triggers/lightweight-apex-trigger-framework/
+ * Implements ITriggerHandler Interface
+ */
+public with sharing class AccountTriggerHandler implements ITriggerHandler {
+
+    public Trigger_Settings__mdt triggerMeta = new Trigger_Settings__mdt();
+
+    /**
+     * Default Constructor
+     */
+    public AccountTriggerHandler() {
+        //Retrieve the metadata type
+        triggerMeta = [SELECT DeveloperName, isActive__c, ObjectName__c, Recursion_Check__c, Max_Loop_Count__c
+                       FROM Trigger_Settings__mdt
+                       WHERE DeveloperName = 'Account_Trigger'
+                                             LIMIT 1];
     }
- 
-    public void BeforeDelete(Map<Id, SObject> oldItems) {}
- 
-    public void AfterInsert(Map<Id, SObject> newItems) {}
- 
-    public void AfterUpdate(Map<Id, SObject> newItems, Map<Id, SObject> oldItems) {}
- 
-    public void AfterDelete(Map<Id, SObject> oldItems) {}
- 
-    public void AfterUndelete(Map<Id, SObject> oldItems) {}
+
+    /**
+     * Determines if a trigger is Disabled
+     * @return   Boolean
+     */
+    public Boolean isDisabled() {
+
+        if (!triggerMeta.isActive__c || FeatureManagement.checkPermission('Bypass_Trigger')) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void beforeInsert(List<SObject> newItems) {
+    }
+
+    public void afterInsert(Map<Id, SObject> newMap) {
+        doFuture(newMap.keyset());
+    }
+
+    public void beforeUpdate(Map<Id, SObject> newMap, Map<Id, SObject> oldMap) {
+    }
+
+    public void afterUpdate(Map<Id, SObject> newMap, Map<Id, SObject> oldMap) {
+    }
+
+    public void beforeDelete(Map<Id, SObject> oldMap) {
+    }
+
+    public void afterDelete(Map<Id, SObject> oldMap) {
+    }
+
+    public void afterUndelete(Map<Id, SObject> oldMap) {
+    }
+
+    @future
+
+    private static void doFuture(Set<Id> newIds) {
+        Account[] objs = [SELECT Id FROM Account WHERE Id IN : newIds];
+
+        for (Account objCur: objs) {
+        }
+    }
 }
 ```
+
 ## Create One Trigger
+
 Create one trigger on an object.  Include every trigger event.  Call the Trigger Dispatcher run() method.  For example, a Account trigger would look like this:
-```java
-trigger AccountTrigger on Account (before insert, before update, before delete, after insert, after update, after delete, after undelete) 
-{
+
+``` csharp
+/**
+ * Trigger for Account
+ * Uses the TriggerHandler framework to handle logic
+ * Based on: http://chrisaldridge.com/triggers/lightweight-apex-trigger-framework/
+ */
+trigger AccountTrigger on Account (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
+
     TriggerDispatcher.Run(new AccountTriggerHandler());
 }
 ```
-
