@@ -52,7 +52,7 @@ public with sharing class AccountTH implements ITriggerHandler {
         //Retrieve the metadata type
         triggerMeta = [SELECT DeveloperName, IsActive__c, ObjectName__c, CheckRecursion__c, LoopCountMax__c
                        FROM TriggerSettings__mdt
-                       WHERE DeveloperName = 'Account_Trigger'
+                       WHERE DeveloperName = 'Account'
                                              LIMIT 1];
     }
 
@@ -62,7 +62,7 @@ public with sharing class AccountTH implements ITriggerHandler {
      */
     public Boolean isDisabled() {
 
-        if (!triggerMeta.isActive__c || FeatureManagement.checkPermission('Bypass_Trigger')) {
+        if (!triggerMeta.isActive__c || FeatureManagement.checkPermission('BypassTrigger')) {
             return false;
         }
 
